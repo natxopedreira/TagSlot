@@ -14,6 +14,7 @@ mindSlotPlayer::mindSlotPlayer(){
     meditation = 0;
     attention = 0;
     turboLink = 0;
+    numVuelta = 0;
     playerName = "";
 }
 
@@ -69,29 +70,33 @@ void mindSlotPlayer::drawDebug(int _x, int _y){
     if(isReady()){
         
         if(getQualityConnection()<100){
-            ofDrawBitmapStringHighlight("player:: " + getPlayerName(), ofPoint(20,0), ofColor(252,125,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("isReady:: " + ofToString(isReady()), ofPoint(20,20), ofColor(252,125,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("con quality:: " + ofToString(getQualityConnection()), ofPoint(20,40), ofColor(252,125,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("attention:: " + ofToString(getAttention()), ofPoint(20,60), ofColor(252,125,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("meditation:: " + ofToString(getMeditation()), ofPoint(20,80), ofColor(252,125,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("metalPower:: " + ofToString(mentalPower.getPower()), ofPoint(20,100), ofColor(252,125,0), ofColor(0,0,0));
-            ofRect(20, 120, mentalPower.getPower(), 20);
+            ofDrawBitmapStringHighlight("PLAYER:: " + getPlayerName(), ofPoint(20,0), ofColor(252,125,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("READY?:: " + ofToString(isReady()), ofPoint(20,20), ofColor(252,125,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("CON QUALITY:: " + ofToString(getQualityConnection()), ofPoint(20,40), ofColor(252,125,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("ATTENTION:: " + ofToString(getAttention()), ofPoint(20,60), ofColor(252,125,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("MEDITATION:: " + ofToString(getMeditation()), ofPoint(20,80), ofColor(252,125,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("MENTAL POWER:: " + ofToString(mentalPower.getPower()), ofPoint(20,100), ofColor(252,125,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("LAPS:: " + ofToString(numVuelta), ofPoint(20,120), ofColor(252,125,0), ofColor(0,0,0));
+            ofRect(20, 140, mentalPower.getPower(), 20);
         }else{
-            ofDrawBitmapStringHighlight("player:: " + getPlayerName(), ofPoint(20,0), ofColor(0,255,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("isReady:: " + ofToString(isReady()), ofPoint(20,20), ofColor(0,255,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("con quality:: " + ofToString(getQualityConnection()), ofPoint(20,40), ofColor(0,255,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("attention:: " + ofToString(getAttention()), ofPoint(20,60), ofColor(0,255,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("meditation:: " + ofToString(getMeditation()), ofPoint(20,80), ofColor(0,255,0), ofColor(0,0,0));
-            ofDrawBitmapStringHighlight("metalPower:: " + ofToString(mentalPower.getPower()), ofPoint(20,100), ofColor(0,255,0), ofColor(0,0,0));
-            ofRect(20, 120, mentalPower.getPower(), 20);
+            ofDrawBitmapStringHighlight("PLAYER:: " + getPlayerName(), ofPoint(20,0), ofColor(0,255,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("READY?:: " + ofToString(isReady()), ofPoint(20,20), ofColor(0,255,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("CON QUALITY:: " + ofToString(getQualityConnection()), ofPoint(20,40), ofColor(0,255,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("ATTENTION:: " + ofToString(getAttention()), ofPoint(20,60), ofColor(0,255,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("MEDITATION:: " + ofToString(getMeditation()), ofPoint(20,80), ofColor(0,255,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("MENTAL POWER:: " + ofToString(mentalPower.getPower()), ofPoint(20,100), ofColor(0,255,0), ofColor(0,0,0));
+            ofDrawBitmapStringHighlight("LAPS:: " + ofToString(numVuelta), ofPoint(20,120), ofColor(0,255,0), ofColor(0,0,0));
+            ofRect(20, 140, mentalPower.getPower(), 20);
         }
+        
     }else{
-        ofDrawBitmapStringHighlight("player:: " + getPlayerName(), ofPoint(20,0), ofColor(255,0,0), ofColor(0,0,0));
-        ofDrawBitmapStringHighlight("isReady:: " + ofToString(isReady()), ofPoint(20,20), ofColor(255,0,0), ofColor(0,0,0));
-        ofDrawBitmapStringHighlight("con quality:: " + ofToString(getQualityConnection()), ofPoint(20,40), ofColor(255,0,0), ofColor(0,0,0));
-        ofDrawBitmapStringHighlight("attention:: " + ofToString(getAttention()), ofPoint(20,60), ofColor(255,0,0), ofColor(0,0,0));
-        ofDrawBitmapStringHighlight("meditation:: " + ofToString(getMeditation()), ofPoint(20,80), ofColor(255,0,0), ofColor(0,0,0));
-        ofDrawBitmapStringHighlight("metalPower:: " + ofToString(mentalPower.getPower()), ofPoint(20,100), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("PLAYER:: " + getPlayerName(), ofPoint(20,0), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("READY?:: " + ofToString(isReady()), ofPoint(20,20), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("CON QUALITY:: " + ofToString(getQualityConnection()), ofPoint(20,40), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("ATTENTION:: " + ofToString(getAttention()), ofPoint(20,60), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("MEDITATION:: " + ofToString(getMeditation()), ofPoint(20,80), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("MENTAL POWER:: " + ofToString(mentalPower.getPower()), ofPoint(20,100), ofColor(255,0,0), ofColor(0,0,0));
+        ofDrawBitmapStringHighlight("LAPS:: " + ofToString(numVuelta), ofPoint(20,120), ofColor(255,0,0), ofColor(0,0,0));
     }
     
     
@@ -110,6 +115,16 @@ void mindSlotPlayer::drawGauge(ofImage * img){
     gauge.draw(0,0);
     
     ofPopMatrix();
+}
+
+//--------------------------------------------------------------
+void mindSlotPlayer::pasoPorVuelta(){
+    numVuelta++;
+}
+
+//--------------------------------------------------------------
+void mindSlotPlayer::resetLapCounter(){
+    numVuelta = 0;
 }
 
 //--------------------------------------------------------------//

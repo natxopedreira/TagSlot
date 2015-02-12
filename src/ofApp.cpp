@@ -64,11 +64,13 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::playerOneNewLap(){
     // vuelta nueva coche 1
+    playerOne.pasoPorVuelta();
 }
 
 //--------------------------------------------------------------
 void ofApp::playerTwoNewLap(){
     // vuelta nueva coche 2
+    playerTwo.pasoPorVuelta();
 }
 
 //--------------------------------------------------------------
@@ -82,12 +84,14 @@ void ofApp::guardaGui(){
 void ofApp::exit(){
     playerOne.closeMindWave();
 }
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-}
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     if(key == 'd') showGui = !showGui;
 }
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+}
+
 

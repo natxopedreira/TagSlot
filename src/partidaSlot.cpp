@@ -47,7 +47,7 @@ void partidaSlot::setup(string arduPort){
 //--------------------------------------------------------------
 void partidaSlot::update(){
     
-    listenToArdu(); // eschicha los pasos por vuelta
+    listenToArdu(); // escucha los pasos por vuelta
     
     talkToArdu(); // dile al arduino que hay que hacer
    
@@ -56,8 +56,10 @@ void partidaSlot::update(){
 //--------------------------------------------------------------
 void partidaSlot::listenToArdu(){
     // nos dice el paso por vuelta de cada coche
-    // dos valores separados por punto y coma
-    // The serial device can throw exeptions.
+    // dos valores 0 or 1
+    // 0 es na de na
+    // 1 es tengo señal de paso por meta !!
+    
     try
     {
         // Read all bytes from the device;
@@ -67,8 +69,6 @@ void partidaSlot::listenToArdu(){
         {
             // tienes algo que decirme
             std::size_t sz = arduino.readBytes(buffer, 2);
-            
-            cout << "me dices que son " << sz << " bytes?? ";
             
             // compruebas que este todo lo que quieres oir
             if(buffer[0]==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapOne + minTimePerLap)){
@@ -90,22 +90,32 @@ void partidaSlot::listenToArdu(){
     }
     catch (const std::exception& exc)
     {
-        ofLogError("ofApp::update") << exc.what();
+        ofLogError("partidaSlot::listenToArdu") << exc.what();
     }
 }
 
 //--------------------------------------------------------------
 void partidaSlot::talkToArdu(){
     
-    // siempre 4 int separados por punto y coma
-    // sonido0 ; sonido1 ; servo0; servo 1
+    
+    // -------------------------------------------- //
+    // -------------------------------------------- //
+    // -------------------------------------------- //
+    // siempre 4 int separados por punto y coma     //
+    // sonido0 ; sonido1 ; servo0; servo1           //
+    // -------------------------------------------- //
+    // -------------------------------------------- //
+    // -------------------------------------------- //
     std::string msg="0;0;0;0";
     
     ofx::IO::ByteBuffer Buffer;
     
     // los valores de salida de los servos hay que ajustarlos entre el recorrido posible
-    int servoPower0 = ofMap(mentalPowers[0], 0, 100, 0, 255);
-    int servoPower1 = ofMap(mentalPowers[1], 0, 100, 0, 255);
+    // ptoServoPlayerOne.set(min, max); // margen para el servo1
+    // ptoServoPlayerTwo.set(min, max); // margen para el servo2
+    
+    int servoPower0 = ofMap(mentalPowers[0], 0, 100, ptoServoPlayerOne.x, ptoServoPlayerOne.y);
+    int servoPower1 = ofMap(mentalPowers[1], 0, 100, ptoServoPlayerTwo.x, ptoServoPlayerTwo.y);
     
     int sonidoPower0 = ofMap(mentalPowers[0], 0, 100, 0, 255);
     int sonidoPower1 = ofMap(mentalPowers[1], 0, 100, 0, 255);
@@ -158,11 +168,6 @@ void partidaSlot::talkToArdu(){
     
 }
 
-
-//--------------------------------------------------------------
-void partidaSlot::draw(){
-
-}
 
 //--------------------------------------------------------------
 void partidaSlot::setPlayerOnePower(int p){

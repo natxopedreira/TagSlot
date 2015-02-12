@@ -24,7 +24,8 @@ public:
     void drawGauge(ofImage * img);
     void closeMindWave();
     
-    
+    void resetLapCounter();
+    void pasoPorVuelta();
     
     bool isReady();
     
@@ -62,6 +63,7 @@ private:
     
     int poorSignal, meditation, attention;
     int turboLink;
+    int numVuelta;
     
     string playerName;
     

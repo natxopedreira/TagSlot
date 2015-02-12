@@ -25,7 +25,6 @@ public:
     
     void setup(string arduPort);
     void update();
-    void draw();
     
     void talkToArdu();
     void listenToArdu();
