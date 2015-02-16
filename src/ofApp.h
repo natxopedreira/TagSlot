@@ -27,7 +27,12 @@ public:
     partidaSlot game;
     
     ofImage bg;
+    
     ofxPanel gui;
+    ofxToggle useAttention;
+    ofxToggle useMeditation;
+    ofxToggle useBooth;
+    
     
     bool showGui;
 };

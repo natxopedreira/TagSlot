@@ -29,11 +29,13 @@ void partidaSlot::setup(string arduPort){
     
     
     // nos conectamos al arduino
-    bool success = arduino.setup(arduPort, 9600);
+    bool success = arduino.setup(arduPort, 115200);
     
     if(success)
     {
         ofLogNotice("partidaSlot::setup") << "Successfully setup " << arduPort;
+        
+       // arduino.registerAllEvents(this);
     }
     else
     {
@@ -41,7 +43,7 @@ void partidaSlot::setup(string arduPort){
     }
 
     
-    readyToRun();
+    startEngines();
 }
 
 //--------------------------------------------------------------
@@ -52,6 +54,43 @@ void partidaSlot::update(){
     talkToArdu(); // dile al arduino que hay que hacer
    
 }
+/*
+
+//--------------------------------------------------------------
+void partidaSlot::onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args)
+{
+    // tengo datos
+    string mensaje = args.getBuffer().toString();
+    cout << "el arduino says que " << mensaje << endl;
+    
+    int msgSize = mensaje.size();
+    
+    if(msgSize==2){
+        // tienes los dos valores que necesito, player 0 y 1
+        if(mensaje.at(0)==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapOne + minTimePerLap)){
+            // el coche 1 pasa por el sensor
+            ofNotifyEvent(pasoPorVueltaOne);
+            timeSinceLastLapOne = ofGetElapsedTimeMillis();
+        }
+        
+        if(mensaje.at(1)==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapTwo + minTimePerLap)){
+            // el coche 2 pasa por el sensor
+            ofNotifyEvent(pasoPorVueltaTwo);
+            timeSinceLastLapTwo = ofGetElapsedTimeMillis();
+        }
+        
+    }
+    
+}
+
+
+void partidaSlot::onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args)
+{
+    // Errors and their corresponding buffer (if any) will show up here.
+    ofLogNotice("partidaSlot::onSerialError") << "Successfully setup " << args.getBuffer().toString() << " //// " << args.getException().displayText();
+}
+
+*/
 
 //--------------------------------------------------------------
 void partidaSlot::listenToArdu(){
@@ -114,11 +153,12 @@ void partidaSlot::talkToArdu(){
     // ptoServoPlayerOne.set(min, max); // margen para el servo1
     // ptoServoPlayerTwo.set(min, max); // margen para el servo2
     
-    int servoPower0 = ofMap(mentalPowers[0], 0, 100, ptoServoPlayerOne.x, ptoServoPlayerOne.y);
-    int servoPower1 = ofMap(mentalPowers[1], 0, 100, ptoServoPlayerTwo.x, ptoServoPlayerTwo.y);
+    int sonidoPower0 = ofMap(mentalPowers[0], 0, 100, 0, 3000, true); //4095
+    int sonidoPower1 = ofMap(mentalPowers[1], 0, 100, 0, 3000, true); // 4095
     
-    int sonidoPower0 = ofMap(mentalPowers[0], 0, 100, 0, 255);
-    int sonidoPower1 = ofMap(mentalPowers[1], 0, 100, 0, 255);
+    int servoPower0 = ofMap(mentalPowers[0], 0, 100, ptoServoPlayerOne.x, ptoServoPlayerOne.y, true);
+    int servoPower1 = ofMap(mentalPowers[1], 0, 100, ptoServoPlayerTwo.x, ptoServoPlayerTwo.y, true);
+
     
     
     switch (gameStatus) {
@@ -133,6 +173,8 @@ void partidaSlot::talkToArdu(){
             // solo tiene que sonar no se puede mover
             // mandas el valor del power para el sonido el servo siempre a 0
             msg = ofToString(sonidoPower0) + ";" +  ofToString(sonidoPower1) + ";0;0";
+            
+            
             break;
             
             
@@ -160,8 +202,10 @@ void partidaSlot::talkToArdu(){
     
     // intenta dicirle algo
     try{
-        arduino.writeBytes(Buffer);
+       // cout << msg << endl;
+        arduino.writeBytes(msg);
         arduino.writeByte('\n');
+        
     }catch (const std::exception& exc){
         ofLogError("partidaSlot::talkToArdu") << exc.what();
     }
@@ -170,8 +214,14 @@ void partidaSlot::talkToArdu(){
 
 
 //--------------------------------------------------------------
+void partidaSlot::cierra(){
+   // arduino.unregisterAllEvents(this);
+}
+
+//--------------------------------------------------------------
 void partidaSlot::setPlayerOnePower(int p){
     mentalPowers[0] = p;
+    //cout << "setPlayerOnePower() " << p << endl;
 }
 
 

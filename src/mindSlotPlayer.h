@@ -20,6 +20,7 @@ public:
 
     void setup(string _name, string _playerName);
     void update();
+    
     void drawDebug(int _x, int _y);
     void drawGauge(ofImage * img);
     void closeMindWave();
@@ -55,6 +56,10 @@ public:
     ofParameter<int> servoMin;
     ofParameter<int> servoMax;
     
+    bool useAttention;
+    bool useMeditation;
+    bool useBooth;
+    
 private:
     ofxThinkgear mindWave;
     ofxThinkgearEventArgs mindWaveData;
@@ -64,6 +69,8 @@ private:
     int poorSignal, meditation, attention;
     int turboLink;
     int numVuelta;
+
+    
     
     string playerName;
     

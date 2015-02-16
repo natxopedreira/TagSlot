@@ -7,7 +7,7 @@ void ofApp::setup(){
     bg.loadImage("bg.jpg");
     
     // inicias el control de la partida
-    game.setup("/dev/tty.Bluetooth-Incoming-Port");
+    game.setup("/dev/tty.usbmodem1411");
     
     // inicias los players diciendole cual es su mindwaves
     playerOne.setup("/dev/tty.MindWaveMobile-DevA", "playerOne");
@@ -20,6 +20,9 @@ void ofApp::setup(){
     // gui con las posiciones de los servos
     gui.setup();
     gui.setName("AJUSTES");
+    gui.add(useAttention.setup("useAttention", false));
+    gui.add(useMeditation.setup("useMeditation", false));
+    gui.add(useBooth.setup("useBooth", false));
     gui.add(playerOne.ajustes);
     gui.add(playerTwo.ajustes);
     gui.loadFromFile("settings.xml");
@@ -33,6 +36,7 @@ void ofApp::setup(){
     
     // muestra el gui
     showGui = false;
+    
 }
 
 //--------------------------------------------------------------
@@ -78,10 +82,19 @@ void ofApp::guardaGui(){
     // pasamos las posiciones al game
     game.ptoServoPlayerOne.set(playerOne.servoMin, playerOne.servoMax);
     game.ptoServoPlayerOne.set(playerTwo.servoMin, playerTwo.servoMax);
+    
+    playerOne.useAttention = useAttention;
+    playerOne.useMeditation = useMeditation;
+    playerOne.useBooth = useBooth;
+    
+    playerTwo.useAttention = useAttention;
+    playerTwo.useMeditation = useMeditation;
+    playerTwo.useBooth = useBooth;
 }
 
 //--------------------------------------------------------------
 void ofApp::exit(){
+    game.cierra();
     playerOne.closeMindWave();
 }
 

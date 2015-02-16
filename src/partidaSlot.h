@@ -37,7 +37,13 @@ public:
     void countdown();
     void racing();
     
+    void cierra();
+    
     ofx::IO::SerialDevice arduino;
+   // ofx::IO::SerialDevice arduino;
+    //void onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args);
+    //void onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args);
+    
     
     ofSoundPlayer sndCountDown;
     

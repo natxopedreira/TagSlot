@@ -15,6 +15,11 @@ mindSlotPlayer::mindSlotPlayer(){
     attention = 0;
     turboLink = 0;
     numVuelta = 0;
+    
+    useAttention = false;
+    useMeditation= false;
+    useBooth= true;
+    
     playerName = "";
 }
 
@@ -54,7 +59,17 @@ void mindSlotPlayer::update(){
     mentalPower.update();
     
     if(getQualityConnection() == 100){
-        mentalPower.setDesiredValue((meditation+attention)/2);
+        
+        if (useAttention) {
+            mentalPower.setDesiredValue(attention);
+        }else if (useMeditation){
+            mentalPower.setDesiredValue(meditation);
+        }else if (useBooth){
+            mentalPower.setDesiredValue((meditation+attention)/2);
+        }
+        
+        
+        
     }else{
         mentalPower.setDesiredValue(0);
     }
@@ -132,7 +147,7 @@ void mindSlotPlayer::resetLapCounter(){
 //--------------------------------------------------------------//
 
 int mindSlotPlayer::getPlayerPower(){
-    mentalPower.getPower();
+    return mentalPower.getPower();
 }
 //--------------------------------------------------------------
 int mindSlotPlayer::getAttention(){

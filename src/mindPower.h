@@ -17,6 +17,7 @@ public:
     void setup(){
         valor = 0;
         desiredValue = 0;
+        turboValue = 0;
     }
     
     //---------------------
@@ -24,9 +25,10 @@ public:
         
         // subimos un punto por cada frame y bajamos un punto cada 30 frames
         if(valor<desiredValue && valor<100){
-            if(ofGetFrameNum() % 2 )valor ++;
+            valor ++;
         }else if(valor>desiredValue && valor>0){
-            if(ofGetFrameNum() % 30 )valor --;
+           // if(ofGetFrameNum() % 2 ==0)valor --;
+            valor --;
         }
         
         // turbo
@@ -51,18 +53,21 @@ public:
     
     //---------------------
     int getPower(){
+        //cout << "mindPower::getPower " << valor << endl;
         return valor;
+        
+        
     }
     
     //--------------------
     int getRotationGauge(){
-        return ofMap(valor,0,100,0,205);
+        return ofMap(valor,0,100,0,230);
     }
     
     int turboBlink(int tb){
         turboValue = tb;
         
-        cout << turboValue << endl;
+       // cout << turboValue << endl;
     }
     
 private:
