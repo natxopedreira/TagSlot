@@ -4,6 +4,7 @@
 #include "mindSlotPlayer.h"
 #include "partidaSlot.h"
 #include "ofxGui.h"
+#include "countDown.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -22,11 +23,20 @@ public:
     void playerOneNewLap();
     void playerTwoNewLap();
     
+    void finishedSemaforo();
+    void loadedSemaforo();
+    
     // mindplay brainband bluetooth device
     mindSlotPlayer playerOne, playerTwo;
     partidaSlot game;
-    
+    countDown semaforo;
     ofImage bg;
+    
+    ofImage fondoLogo;
+    ofImage salpicadero;
+    ofImage esfera;
+    ofImage mascaraBarra;
+
     
     ofxPanel gui;
     ofxToggle useAttention;

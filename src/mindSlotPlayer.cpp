@@ -40,8 +40,8 @@ void mindSlotPlayer::setup(string _name, string _playerName){
     
     playerName = _playerName;
     
-    gauge.loadImage("gauge.png");
-    gauge.setAnchorPoint(91+9, -15);
+    gauge.loadImage("aguja.png");
+    gauge.setAnchorPoint(60, 84);
     
     ajustes.setName("servo player " + _playerName);
     ajustes.add(servoMin.set("minimo", 0, 0, 255));
@@ -119,17 +119,36 @@ void mindSlotPlayer::drawDebug(int _x, int _y){
 }
 
 //--------------------------------------------------------------
-void mindSlotPlayer::drawGauge(ofImage * img){
-    img->draw(0, 0);
+void mindSlotPlayer::drawGauge(ofPoint pt){
+    //img->draw(0, 0);
     
     ofPushMatrix();
-    ofTranslate(631,385);
+    ofTranslate(pt);
     
     ofRotate(mentalPower.getRotationGauge());
     
     gauge.draw(0,0);
     
     ofPopMatrix();
+}
+
+//--------------------------------------------------------------
+void mindSlotPlayer::drawConnection(){
+    //rectangulo de calidad de conexion
+    ofPushStyle();
+    
+    if(isReady())
+        ofSetColor(196, 106, 27); //naranja
+    else
+        ofSetColor(255, 0, 0); //rojo pq no esta conectado
+    
+    ofRect(700, 985, 521, 200);
+    
+    
+    ofSetColor(7, 188, 75); //verde
+    ofRect(700, 985, 521 * getQualityConnectionPct(), 200);
+    
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -164,6 +183,10 @@ bool mindSlotPlayer::isReady(){
 //--------------------------------------------------------------
 int mindSlotPlayer::getQualityConnection(){
     return ofMap(poorSignal, 200, 0, 0, 100);
+}
+//--------------------------------------------------------------
+float mindSlotPlayer::getQualityConnectionPct(){
+    return ofMap(poorSignal, 200, 0, 0, 1);
 }
 //--------------------------------------------------------------
 string mindSlotPlayer::getPlayerName(){

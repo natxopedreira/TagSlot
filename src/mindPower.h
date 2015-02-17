@@ -61,7 +61,7 @@ public:
     
     //--------------------
     int getRotationGauge(){
-        return ofMap(valor,0,100,0,230);
+        return ofMap(valor,0,100,30,265);
     }
     
     int turboBlink(int tb){

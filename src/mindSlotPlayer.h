@@ -22,7 +22,8 @@ public:
     void update();
     
     void drawDebug(int _x, int _y);
-    void drawGauge(ofImage * img);
+    void drawGauge(ofPoint pt);
+    void drawConnection();
     void closeMindWave();
     
     void resetLapCounter();
@@ -33,6 +34,7 @@ public:
     int getAttention();
     int getMeditation();
     int getQualityConnection();
+    float getQualityConnectionPct();
     int getPlayerPower();
     
     string getPlayerName();

@@ -6,8 +6,25 @@ void ofApp::setup(){
     // imagen de fondo del salpicadero
     bg.loadImage("bg.jpg");
     
+    // imagen de fondo con reja y logo
+    fondoLogo.loadImage("fondo_reja_con_logo.jpg");
+    
+    // salpicadero negro con halo
+    salpicadero.loadImage("salpicadero_negro.png");
+    
+    // marcador del coche
+    esfera.loadImage("esfera_marcador.png");
+    
+    // mscara con barras horizontales para la calidad de conexion
+    mascaraBarra.loadImage("mascara_barras.png");
+    
+
+    
+    
+    
     // inicias el control de la partida
-    game.setup("/dev/tty.usbmodem1411");
+    game.setup("/dev/tty.Bluetooth-Incoming-Port"); //tty.Bluetooth-Incoming-Port //tty.usbmodem1411
+    game.readyToRun();
     
     // inicias los players diciendole cual es su mindwaves
     playerOne.setup("/dev/tty.MindWaveMobile-DevA", "playerOne");
@@ -37,6 +54,12 @@ void ofApp::setup(){
     // muestra el gui
     showGui = false;
     
+    
+    // cargamos el semaforo
+    semaforo.setup();
+    
+    ofAddListener(semaforo.terminado, this, &ofApp::finishedSemaforo);
+    ofAddListener(semaforo.cargado, this, &ofApp::loadedSemaforo);
 }
 
 //--------------------------------------------------------------
@@ -52,19 +75,77 @@ void ofApp::update(){
     // actualizas el juego que manda lo que sea al ardu
     game.update();
     
+    // actualiza el semaforo, si no esta running ya pasa el de todo
+    semaforo.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ////////////////////////////////////////
+    ///////// player ONE ///////////////////
+    ////////////////////////////////////////
     
-    playerOne.drawGauge(&bg); // aguja del indicador de velocidad pasas el puntero del dashboard
+    fondoLogo.draw(0, 0); // fondo con reja
+    salpicadero.draw(0, 0); // salpicadero
+    
+    ofPoint ptMarcadorUno(377, ofGetHeight()-esfera.getHeight());
+    
+    // dependiendo del estado de la partida dibujamos
+    // el semaforo de la cuenta atras
+    // la esfera con el marcador de power
+    // el panel de winner
+    switch (game.gameStatus) {
+        case partidaSlot::READY_TO_RUN:
+            esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+            playerOne.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            break;
+            
+        case partidaSlot::START_ENGINES:
+            esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+            playerOne.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            
+            break;
+            
+        case partidaSlot::COUNTDOWN:
+            
+            break;
+            
+        case partidaSlot::RACING:
+            esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+            playerOne.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            break;
+    }
+    
+    
+    // semaforo, es autonomo si esta funcionando se ve
+    semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
+
+    
+    playerOne.drawConnection(); // barra de calidad de conexion
+    mascaraBarra.draw(0, 0);
+    
     playerOne.drawDebug(50, 50); // info de debug
+    ////////////////////////////////////////
+    
+    
+    
+    
+    game.drawDebug();
     
     if(showGui) gui.draw();
 }
 
-
-
+//--------------------------------------------------------------
+void ofApp::finishedSemaforo(){
+    // se acabo la cuenta atras asi que zapatilla
+    game.racing();
+    semaforo.stop();
+}
+//--------------------------------------------------------------
+void ofApp::loadedSemaforo(){
+    // se acabo la cuenta atras asi que zapatilla
+    game.countdown();
+}
 //--------------------------------------------------------------
 void ofApp::playerOneNewLap(){
     // vuelta nueva coche 1
@@ -92,15 +173,27 @@ void ofApp::guardaGui(){
     playerTwo.useBooth = useBooth;
 }
 
+
+
 //--------------------------------------------------------------
 void ofApp::exit(){
     game.cierra();
     playerOne.closeMindWave();
+    
+    
+    ofRemoveListener(game.pasoPorVueltaOne, this, &ofApp::playerOneNewLap);
+    ofRemoveListener(game.pasoPorVueltaTwo, this, &ofApp::playerTwoNewLap);
+    ofRemoveListener(gui.savePressedE, this, &ofApp::guardaGui);
+    ofRemoveListener(semaforo.terminado, this, &ofApp::finishedSemaforo);
+    ofRemoveListener(semaforo.cargado, this, &ofApp::loadedSemaforo);
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     if(key == 'd') showGui = !showGui;
+    
+    if(key == 'c') semaforo.go();
 }
 
 //--------------------------------------------------------------

@@ -43,7 +43,7 @@ void partidaSlot::setup(string arduPort){
     }
 
     
-    startEngines();
+    //countdown();
 }
 
 //--------------------------------------------------------------
@@ -54,43 +54,48 @@ void partidaSlot::update(){
     talkToArdu(); // dile al arduino que hay que hacer
    
 }
-/*
+
 
 //--------------------------------------------------------------
-void partidaSlot::onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args)
-{
-    // tengo datos
-    string mensaje = args.getBuffer().toString();
-    cout << "el arduino says que " << mensaje << endl;
-    
-    int msgSize = mensaje.size();
-    
-    if(msgSize==2){
-        // tienes los dos valores que necesito, player 0 y 1
-        if(mensaje.at(0)==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapOne + minTimePerLap)){
-            // el coche 1 pasa por el sensor
-            ofNotifyEvent(pasoPorVueltaOne);
-            timeSinceLastLapOne = ofGetElapsedTimeMillis();
-        }
-        
-        if(mensaje.at(1)==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapTwo + minTimePerLap)){
-            // el coche 2 pasa por el sensor
-            ofNotifyEvent(pasoPorVueltaTwo);
-            timeSinceLastLapTwo = ofGetElapsedTimeMillis();
-        }
-        
+void partidaSlot::drawDebug(){
+    switch (gameStatus) {
+        case READY_TO_RUN:
+            // mandas todo a 0 no se esta jugando
+            ofDrawBitmapStringHighlight("estado de pardida READY TO RUN", 50,30);
+            
+            break;
+            
+        case START_ENGINES:
+            // te pones el casco, se conecta y pruebas el blink para acelerar
+            // solo tiene que sonar no se puede mover
+            ofDrawBitmapStringHighlight("estado de pardida START YOUR ENGINES", 50,30);
+            
+            
+            break;
+            
+            
+        case COUNTDOWN:
+            // esta sonando la cuenta atras aun no puedes mover el servo
+            // mandas el valor del power para el sonido el servo siempre a 0
+            ofDrawBitmapStringHighlight("estado de pardida COUNTDOWN", 50,30);
+            
+            break;
+            
+            
+        case RACING:
+            // feeeerrro a fondo
+            // mandas el valor del power para el sonido el del servo
+           ofDrawBitmapStringHighlight("estado de pardida RACING", 50,30);
+            
+            break;
+            
     }
     
+    
+    
+    
+
 }
-
-
-void partidaSlot::onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args)
-{
-    // Errors and their corresponding buffer (if any) will show up here.
-    ofLogNotice("partidaSlot::onSerialError") << "Successfully setup " << args.getBuffer().toString() << " //// " << args.getException().displayText();
-}
-
-*/
 
 //--------------------------------------------------------------
 void partidaSlot::listenToArdu(){
