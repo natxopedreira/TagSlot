@@ -47,9 +47,17 @@ void mindSlotPlayer::setup(string _name, string _playerName){
     ajustes.add(servoMin.set("minimo", 0, 0, 255));
     ajustes.add(servoMax.set("maximo", 0, 0, 255));
     
-    ofParameterGroup ajustes;
-    ofParameter<int> servoMin;
-    ofParameter<int> servoMax;
+    fuenteLaps.loadFont("EurostileRegular.ttf", 100);
+    
+    fuenteGrande.loadFont("EurostileRegular.ttf", 100);
+    fuenteGrande.setLetterSpacing(0.8);
+    
+    fuentePequena.loadFont("EurostileBold.ttf", 19);
+    fuentePequena.setLetterSpacing(1.14);
+    
+    fuenteMedia.loadFont("EurostileRegular.ttf", 79);
+    fuenteMedia.setLetterSpacing(0.9);
+    fuenteMedia.setSpaceSize(0.4);
 }
 
 //--------------------------------------------------------------
@@ -160,6 +168,62 @@ void mindSlotPlayer::pasoPorVuelta(){
 void mindSlotPlayer::resetLapCounter(){
     numVuelta = 0;
 }
+
+
+//--------------------------- DRAW -----------------------------//
+//--------------------------------------------------------------
+void mindSlotPlayer::drawPlayerNumber(){
+    ofPushStyle();
+    ofSetColor(91, 91, 91);
+    fuenteGrande.drawString(playerName, 45, 160);
+    ofPopStyle();
+}
+
+//--------------------------------------------------------------
+void mindSlotPlayer::drawConcentrationMeditation(){
+    ofPushStyle();
+    ofSetColor(255, 255, 255);
+    fuentePequena.drawString("ATTENTION", 45, 900);
+    fuentePequena.drawString("MEDITATION", 325, 900);
+    
+    ofSetColor(162, 162, 162);
+    
+    // concentracion
+    if(getAttention()<10){
+        fuenteMedia.drawString("0" + ofToString(getAttention()) + " %", 41, 980);
+    }else{
+        fuenteMedia.drawString(ofToString(getAttention()) + " %", 41, 980);
+    }
+    
+    // meditacion
+    if (getMeditation()<10) {
+        fuenteMedia.drawString("0" + ofToString(getMeditation()) + " %", 321, 980);
+    }else{
+        fuenteMedia.drawString(ofToString(getMeditation()) + " %", 321, 980);
+    }
+    
+    
+    ofPopStyle();
+}
+
+//--------------------------------------------------------------
+void mindSlotPlayer::drawlapsData(){
+    ofPushStyle();
+    ofSetColor(91, 91, 91);
+    fuenteLaps.drawString("00:00:00", 1310, 980);
+    fuenteMedia.drawString("LAP", 1510, 855);
+    
+    ofSetColor(255, 255, 255);
+    if(numVuelta<10){
+        fuenteLaps.drawString("0"+ofToString(numVuelta), 1690, 855);
+    }else{
+        fuenteLaps.drawString("10", 1690, 855);
+    }
+    
+    
+    ofPopStyle();
+}
+
 
 //--------------------------------------------------------------//
 //--------------------------- GETTTERS -------------------------//

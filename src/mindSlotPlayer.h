@@ -26,6 +26,10 @@ public:
     void drawConnection();
     void closeMindWave();
     
+    void drawPlayerNumber();
+    void drawConcentrationMeditation();
+    void drawlapsData();
+    
     void resetLapCounter();
     void pasoPorVuelta();
     
@@ -67,6 +71,11 @@ private:
     ofxThinkgearEventArgs mindWaveData;
     
     mindPower mentalPower;
+    
+    ofTrueTypeFont fuenteGrande;
+    ofTrueTypeFont fuentePequena;
+    ofTrueTypeFont fuenteMedia;
+    ofTrueTypeFont fuenteLaps;
     
     int poorSignal, meditation, attention;
     int turboLink;

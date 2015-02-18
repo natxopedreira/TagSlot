@@ -27,8 +27,8 @@ void ofApp::setup(){
     game.readyToRun();
     
     // inicias los players diciendole cual es su mindwaves
-    playerOne.setup("/dev/tty.MindWaveMobile-DevA", "playerOne");
-    playerTwo.setup("/dev/tty.MindWaveMobile-DevA-1", "playerTwo");
+    playerOne.setup("/dev/tty.MindWaveMobile-DevA", "01");
+    playerTwo.setup("/dev/tty.MindWaveMobile-DevA-1", "02");
     
     // cada vez que el coche pasa por el sensor de vuelta se ejecuta este listener
     ofAddListener(game.pasoPorVueltaOne, this, &ofApp::playerOneNewLap);
@@ -88,6 +88,13 @@ void ofApp::draw(){
     fondoLogo.draw(0, 0); // fondo con reja
     salpicadero.draw(0, 0); // salpicadero
     
+    
+    // datos del player one
+    playerOne.drawPlayerNumber();
+    playerOne.drawConcentrationMeditation();
+    playerOne.drawlapsData();
+    
+    
     ofPoint ptMarcadorUno(377, ofGetHeight()-esfera.getHeight());
     
     // dependiendo del estado de la partida dibujamos
@@ -116,6 +123,8 @@ void ofApp::draw(){
             break;
     }
     
+
+    
     
     // semaforo, es autonomo si esta funcionando se ve
     semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
@@ -124,7 +133,7 @@ void ofApp::draw(){
     playerOne.drawConnection(); // barra de calidad de conexion
     mascaraBarra.draw(0, 0);
     
-    playerOne.drawDebug(50, 50); // info de debug
+    playerOne.drawDebug(300, 100); // info de debug
     ////////////////////////////////////////
     
     

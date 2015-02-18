@@ -42,7 +42,7 @@ public:
         semaforoRojo.loadImage("semaforo-rojo.png");
         semaforoVerde.loadImage("semaforo-verde.png");
         
-        fuente.loadFont("Helvetica.ttf", 200);
+        fuente.loadFont("EurostileRegular.ttf", 500);
         
         running = false;
         luzVerde = false;
@@ -95,7 +95,9 @@ public:
         int alpha = ofMap((tiempoDesdeInicio+tiempoPorLetra) - ofGetElapsedTimeMillis(), tiempoPorLetra, 1, 255 , 10);
         
         ofSetColor(255, 255, 255, alpha);
-        fuente.drawString(ofToString(cuentaAtras), 300, 500);
+        
+                                                        
+        fuente.drawString(ofToString(cuentaAtras), 735, 730);
         ofPopStyle();
     }
     
