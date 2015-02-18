@@ -18,9 +18,6 @@ void ofApp::setup(){
     // mscara con barras horizontales para la calidad de conexion
     mascaraBarra.loadImage("mascara_barras.png");
     
-
-    
-    
     
     // inicias el control de la partida
     game.setup("/dev/tty.Bluetooth-Incoming-Port"); //tty.Bluetooth-Incoming-Port //tty.usbmodem1411
@@ -34,7 +31,12 @@ void ofApp::setup(){
     ofAddListener(game.pasoPorVueltaOne, this, &ofApp::playerOneNewLap);
     ofAddListener(game.pasoPorVueltaTwo, this, &ofApp::playerTwoNewLap);
     
+    // si el marcador de vueltas de alguno de loc players llega a 10
+    ofAddListener(playerOne.playerWin, this, &ofApp::playerOneWins);
+    ofAddListener(playerTwo.playerWin, this, &ofApp::playerTwoWins);
+    
     // gui con las posiciones de los servos
+    
     gui.setup();
     gui.setName("AJUSTES");
     gui.add(useAttention.setup("useAttention", false));
@@ -121,9 +123,11 @@ void ofApp::draw(){
             esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
             playerOne.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
             break;
+            
+        case partidaSlot::FINISHED:
+            
+            break;
     }
-    
-
     
     
     // semaforo, es autonomo si esta funcionando se ve
@@ -133,11 +137,10 @@ void ofApp::draw(){
     playerOne.drawConnection(); // barra de calidad de conexion
     mascaraBarra.draw(0, 0);
     
+    
+    
+    
     playerOne.drawDebug(300, 100); // info de debug
-    ////////////////////////////////////////
-    
-    
-    
     
     game.drawDebug();
     
@@ -154,6 +157,18 @@ void ofApp::finishedSemaforo(){
 void ofApp::loadedSemaforo(){
     // se acabo la cuenta atras asi que zapatilla
     game.countdown();
+}
+
+
+//--------------------------------------------------------------
+void ofApp::playerOneWins(){
+    // el player uno acaba de completar la 10 vuelta
+    game.finished();
+}
+//--------------------------------------------------------------
+void ofApp::playerTwoWins(){
+    // el player uno acaba de completar la 10 vuelta
+    game.finished();
 }
 //--------------------------------------------------------------
 void ofApp::playerOneNewLap(){
@@ -189,7 +204,8 @@ void ofApp::exit(){
     game.cierra();
     playerOne.closeMindWave();
     
-    
+    ofRemoveListener(playerOne.playerWin, this, &ofApp::playerOneWins);
+    ofRemoveListener(playerTwo.playerWin, this, &ofApp::playerTwoWins);
     ofRemoveListener(game.pasoPorVueltaOne, this, &ofApp::playerOneNewLap);
     ofRemoveListener(game.pasoPorVueltaTwo, this, &ofApp::playerTwoNewLap);
     ofRemoveListener(gui.savePressedE, this, &ofApp::guardaGui);

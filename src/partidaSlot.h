@@ -19,7 +19,8 @@ public:
         READY_TO_RUN, // esta listo para comenzar
         START_ENGINES, // paso 1 manda valor de sonido y servo siempre a 0
         COUNTDOWN, // paso 2 lanza la cuenta atras
-        RACING // paso 3 manda sonido y valor del servo
+        RACING, // paso 3 manda sonido y valor del servo
+        FINISHED
     };
     
     
@@ -37,6 +38,7 @@ public:
     void startEngines();
     void countdown();
     void racing();
+    void finished();
     
     void cierra();
     

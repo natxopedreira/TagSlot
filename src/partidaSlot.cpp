@@ -89,6 +89,14 @@ void partidaSlot::drawDebug(){
             
             break;
             
+            
+        case FINISHED:
+            // feeeerrro a fondo
+            // mandas el valor del power para el sonido el del servo
+            ofDrawBitmapStringHighlight("estado de pardida FINISHED", 50,30);
+            
+            break;
+            
     }
     
     
@@ -96,6 +104,7 @@ void partidaSlot::drawDebug(){
     
 
 }
+
 
 //--------------------------------------------------------------
 void partidaSlot::listenToArdu(){
@@ -115,13 +124,13 @@ void partidaSlot::listenToArdu(){
             std::size_t sz = arduino.readBytes(buffer, 2);
             
             // compruebas que este todo lo que quieres oir
-            if(buffer[0]==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapOne + minTimePerLap)){
+            if(buffer[0]=='1' && ofGetElapsedTimeMillis()> (timeSinceLastLapOne + minTimePerLap)){
                 // el coche 1 pasa por el sensor
                 ofNotifyEvent(pasoPorVueltaOne);
                 timeSinceLastLapOne = ofGetElapsedTimeMillis();
             }
             
-            if(buffer[1]==1 && ofGetElapsedTimeMillis()> (timeSinceLastLapTwo + minTimePerLap)){
+            if(buffer[1]=='1' && ofGetElapsedTimeMillis()> (timeSinceLastLapTwo + minTimePerLap)){
                 // el coche 2 pasa por el sensor
                 ofNotifyEvent(pasoPorVueltaTwo);
                 timeSinceLastLapTwo = ofGetElapsedTimeMillis();
@@ -164,12 +173,12 @@ void partidaSlot::talkToArdu(){
     int servoPower0 = ofMap(mentalPowers[0], 0, 100, ptoServoPlayerOne.x, ptoServoPlayerOne.y, true);
     int servoPower1 = ofMap(mentalPowers[1], 0, 100, ptoServoPlayerTwo.x, ptoServoPlayerTwo.y, true);
 
-    
+    ////
     
     switch (gameStatus) {
         case READY_TO_RUN:
             // mandas todo a 0 no se esta jugando
-            msg = "0;0;0;0";
+            msg = "0;0;" + ofToString(ptoServoPlayerOne.x) + ";" +ofToString(ptoServoPlayerTwo.x);
             
             break;
             
@@ -177,7 +186,7 @@ void partidaSlot::talkToArdu(){
             // te pones el casco, se conecta y pruebas el blink para acelerar
             // solo tiene que sonar no se puede mover
             // mandas el valor del power para el sonido el servo siempre a 0
-            msg = ofToString(sonidoPower0) + ";" +  ofToString(sonidoPower1) + ";0;0";
+            msg = ofToString(sonidoPower0) + ";" +  ofToString(sonidoPower1)  + ofToString(ptoServoPlayerOne.x) + ";" +ofToString(ptoServoPlayerTwo.x);
             
             
             break;
@@ -186,7 +195,7 @@ void partidaSlot::talkToArdu(){
         case COUNTDOWN:
             // esta sonando la cuenta atras aun no puedes mover el servo
             // mandas el valor del power para el sonido el servo siempre a 0
-            msg = ofToString(sonidoPower0) + ";" +  ofToString(sonidoPower1) + ";0;0";
+            msg = ofToString(sonidoPower0) + ";" +  ofToString(sonidoPower1)  + ofToString(ptoServoPlayerOne.x) + ";" +ofToString(ptoServoPlayerTwo.x);
             
             break;
             
@@ -197,6 +206,11 @@ void partidaSlot::talkToArdu(){
             msg = ofToString(sonidoPower0) + ";" +  ofToString(sonidoPower1) +
             ";"  + ofToString(servoPower0) + ";" +  ofToString(servoPower1) + ";";
             
+            break;
+            
+        case FINISHED:
+            // mandas todo a 0 no se esta jugando
+            msg = "0;0;" + ofToString(ptoServoPlayerOne.x) + ";" +ofToString(ptoServoPlayerTwo.x);
             break;
 
     }
@@ -254,4 +268,9 @@ void partidaSlot::countdown(){
 //--------------------------------------------------------------
 void partidaSlot::racing(){
     gameStatus = RACING;
+}
+
+//--------------------------------------------------------------
+void partidaSlot::finished(){
+    gameStatus = FINISHED;
 }

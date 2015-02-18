@@ -66,6 +66,8 @@ public:
     bool useMeditation;
     bool useBooth;
     
+    ofEvent<void> playerWin;
+    
 private:
     ofxThinkgear mindWave;
     ofxThinkgearEventArgs mindWaveData;

@@ -44,8 +44,8 @@ void mindSlotPlayer::setup(string _name, string _playerName){
     gauge.setAnchorPoint(60, 84);
     
     ajustes.setName("servo player " + _playerName);
-    ajustes.add(servoMin.set("minimo", 0, 0, 255));
-    ajustes.add(servoMax.set("maximo", 0, 0, 255));
+    ajustes.add(servoMin.set("minimo", 0, 0, 179));
+    ajustes.add(servoMax.set("maximo", 0, 0, 179));
     
     fuenteLaps.loadFont("EurostileRegular.ttf", 100);
     
@@ -161,7 +161,11 @@ void mindSlotPlayer::drawConnection(){
 
 //--------------------------------------------------------------
 void mindSlotPlayer::pasoPorVuelta(){
-    numVuelta++;
+    if(numVuelta == 10){
+        ofNotifyEvent(playerWin);
+    }else{
+        numVuelta++;
+    }
 }
 
 //--------------------------------------------------------------

@@ -23,6 +23,9 @@ public:
     void playerOneNewLap();
     void playerTwoNewLap();
     
+    void playerOneWins();
+    void playerTwoWins();
+    
     void finishedSemaforo();
     void loadedSemaforo();
     
@@ -36,13 +39,11 @@ public:
     ofImage salpicadero;
     ofImage esfera;
     ofImage mascaraBarra;
-
     
     ofxPanel gui;
     ofxToggle useAttention;
     ofxToggle useMeditation;
     ofxToggle useBooth;
-    
     
     bool showGui;
 };
