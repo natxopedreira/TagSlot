@@ -52,6 +52,7 @@ public:
     ofImage salpicadero;
     ofImage esfera;
     ofImage mascaraBarra;
+    ofImage winnerImg;
     
     ofxPanel gui;
     ofxToggle useAttention;
@@ -59,4 +60,5 @@ public:
     ofxToggle useBooth;
     
     bool showGui;
+    int whoWins;
 };

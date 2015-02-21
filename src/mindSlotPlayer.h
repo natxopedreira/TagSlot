@@ -41,6 +41,8 @@ public:
     float getQualityConnectionPct();
     int getPlayerPower();
     
+    string getTiempoTotal();
+    
     string getPlayerName();
     
     // mindwave events
@@ -67,6 +69,9 @@ public:
     bool useBooth;
     
     ofEvent<void> playerWin;
+    
+    long tiempoTotal;
+    long tiempoVuelta;
     
 private:
     ofxThinkgear mindWave;

@@ -58,6 +58,9 @@ void mindSlotPlayer::setup(string _name, string _playerName){
     fuenteMedia.loadFont("EurostileRegular.ttf", 79);
     fuenteMedia.setLetterSpacing(0.9);
     fuenteMedia.setSpaceSize(0.4);
+    
+    tiempoTotal = 0;
+    tiempoVuelta = 0;
 }
 
 //--------------------------------------------------------------
@@ -165,7 +168,39 @@ void mindSlotPlayer::pasoPorVuelta(){
         ofNotifyEvent(playerWin);
     }else{
         numVuelta++;
+        if(numVuelta!=0){
+            // sino es la primera tienes tiempo
+            tiempoTotal += ofGetElapsedTimeMillis()-tiempoVuelta;
+        }
+        tiempoVuelta = ofGetElapsedTimeMillis();
     }
+}
+
+//--------------------------------------------------------------
+string mindSlotPlayer::getTiempoTotal(){
+
+    // tenemos milisegundos 9860
+    // queremos 00::00::00
+    // minutos::segundos::decimas
+    int minutos = (tiempoTotal/1000)/60;
+    int segundos = (tiempoTotal-minutos) / 1000;
+    int decimas = (tiempoTotal-segundos) / 100;
+    
+    
+    string cadena = "";
+    
+    string m = ofToString(minutos);
+    if(m.size()<2){ m = "0" + m; }
+    
+    string s = ofToString(segundos);
+    if(s.size()<2){ s = "0" + s; }
+    
+    string d = ofToString(decimas);
+    if(d.size()<2){ d = "0" + d; }
+    
+    cadena = m + ":" + s + ":" + d;
+    
+    return cadena;
 }
 
 //--------------------------------------------------------------
@@ -214,7 +249,7 @@ void mindSlotPlayer::drawConcentrationMeditation(){
 void mindSlotPlayer::drawlapsData(){
     ofPushStyle();
     ofSetColor(91, 91, 91);
-    fuenteLaps.drawString("00:00:00", 1310, 980);
+    fuenteLaps.drawString(getTiempoTotal(), 1310, 980);
     fuenteMedia.drawString("LAP", 1510, 855);
     
     ofSetColor(255, 255, 255);

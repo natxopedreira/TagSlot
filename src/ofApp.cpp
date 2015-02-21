@@ -20,10 +20,12 @@ void ofApp::setup(){
     // mscara con barras horizontales para la calidad de conexion
     mascaraBarra.loadImage("mascara_barras.png");
     
+    // imahen para el final
+    winnerImg.loadImage("winner.png");
     
     // inicias el control de la partida
     game.setup("/dev/tty.Bluetooth-Incoming-Port"); //tty.Bluetooth-Incoming-Port //tty.usbmodem1411
-    game.readyToRun();
+    game.startEngines();
     
     // inicias los players diciendole cual es su mindwaves
     playerOne.setup("/dev/tty.MindWaveMobile-DevA", "01");
@@ -67,6 +69,9 @@ void ofApp::setup(){
     
     // creamos la segunda ventana pal player 2
     secondWindow.setup("player two", 50, 50, 1920, 1080, false);
+ 
+    // para saber quien ha ganado y dibujarle el win en su apntalla
+    whoWins = 0;
 }
 
 //--------------------------------------------------------------
@@ -84,22 +89,26 @@ void ofApp::update(){
     
     // actualiza el semaforo, si no esta running ya pasa el de todo
     semaforo.update();
+    
+    
+   // cout << playerOne.getTiempoTotal() << endl;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
+    // draw players
     drawPlayerOne();
     drawPlayerTwo();
     
-    
-    
-    
-    playerOne.drawDebug(300, 100); // info de debug
+    // debug player info
+    playerOne.drawDebug(300, 100);
     playerTwo.drawDebug(300, 300);
     
+    // debug game status
     game.drawDebug();
     
+    // gui
     if(showGui) gui.draw();
 }
 
@@ -115,14 +124,15 @@ void ofApp::drawPlayerOne(){
     ////////////////////////////////////////
     
     fondoLogo.draw(0, 0); // fondo con reja
-    salpicadero.draw(0, 0); // salpicadero
     
-    
-    // datos del player one
-    playerOne.drawPlayerNumber();
-    playerOne.drawConcentrationMeditation();
-    playerOne.drawlapsData();
-    
+    if(game.gameStatus != partidaSlot::FINISHED || whoWins != 1){
+        
+        salpicadero.draw(0, 0); // salpicadero
+        // datos del player one
+        playerOne.drawPlayerNumber();
+        playerOne.drawConcentrationMeditation();
+        playerOne.drawlapsData();
+    }
     
     ofPoint ptMarcadorUno(377, ofGetHeight()-esfera.getHeight());
     
@@ -152,22 +162,28 @@ void ofApp::drawPlayerOne(){
             break;
             
         case partidaSlot::FINISHED:
-            
+            if(whoWins == 1){
+                winnerImg.draw(0, 0);
+            }else{
+                esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+                playerOne.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            }
             break;
     }
     
+    if(game.gameStatus != partidaSlot::FINISHED || whoWins != 1){
+        
+        // semaforo, es autonomo si esta funcionando se ve
+        semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
     
-    // semaforo, es autonomo si esta funcionando se ve
-    semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
     
-    
-    playerOne.drawConnection(); // barra de calidad de conexion
-    mascaraBarra.draw(0, 0);
+        playerOne.drawConnection(); // barra de calidad de conexion
+        mascaraBarra.draw(0, 0);
+    }
 }
 
 
-
-
+//--------------------------------------------------------------
 void ofApp::drawPlayerTwo(){
     
     secondWindow.begin();
@@ -176,14 +192,16 @@ void ofApp::drawPlayerTwo(){
     ////////////////////////////////////////
     
     fondoLogo.draw(0, 0); // fondo con reja
-    salpicadero.draw(0, 0); // salpicadero
+    
+    if(game.gameStatus != partidaSlot::FINISHED || whoWins != 2){
+        salpicadero.draw(0, 0); // salpicadero
     
     
-    // datos del player one
-    playerTwo.drawPlayerNumber();
-    playerTwo.drawConcentrationMeditation();
-    playerOne.drawlapsData();
-    
+        // datos del player one
+        playerTwo.drawPlayerNumber();
+        playerTwo.drawConcentrationMeditation();
+        playerOne.drawlapsData();
+    }
     
     ofPoint ptMarcadorUno(377, ofGetHeight()-esfera.getHeight());
     
@@ -213,18 +231,23 @@ void ofApp::drawPlayerTwo(){
             break;
             
         case partidaSlot::FINISHED:
-            
+            if(whoWins == 2){
+                winnerImg.draw(0, 0);
+            }else{
+                esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+                playerTwo.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            }
             break;
     }
     
+    if(game.gameStatus != partidaSlot::FINISHED || whoWins != 2){
+        
+        // semaforo, es autonomo si esta funcionando se ve
+        semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
     
-    // semaforo, es autonomo si esta funcionando se ve
-    semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
-    
-    
-    playerTwo.drawConnection(); // barra de calidad de conexion
-    mascaraBarra.draw(0, 0);
-
+        playerTwo.drawConnection(); // barra de calidad de conexion
+        mascaraBarra.draw(0, 0);
+    }
     
     secondWindow.end();
 }
@@ -247,11 +270,13 @@ void ofApp::loadedSemaforo(){
 void ofApp::playerOneWins(){
     // el player uno acaba de completar la 10 vuelta
     game.finished();
+    whoWins = 1;
 }
 //--------------------------------------------------------------
 void ofApp::playerTwoWins(){
     // el player uno acaba de completar la 10 vuelta
     game.finished();
+    whoWins = 2;
 }
 //--------------------------------------------------------------
 void ofApp::playerOneNewLap(){
@@ -280,6 +305,7 @@ void ofApp::nuevaPartida(){
     // esta aqui hasta que todos tienen wai la conexion y estan listos
     // no suena ni se mueve
     // solo se ve el dashboard
+     whoWins = 0;
     
     playerOne.resetLapCounter();
     playerTwo.resetLapCounter();
