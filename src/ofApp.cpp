@@ -2,9 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
-    ofSetWindowPosition(1920, 0);
-    ofToggleFullscreen();
+    ofSetWindowTitle("player one");
+   
     
     // imagen de fondo del salpicadero
     bg.loadImage("bg.jpg");
@@ -65,6 +64,9 @@ void ofApp::setup(){
     
     ofAddListener(semaforo.terminado, this, &ofApp::finishedSemaforo);
     ofAddListener(semaforo.cargado, this, &ofApp::loadedSemaforo);
+    
+    // creamos la segunda ventana pal player 2
+    secondWindow.setup("player two", 50, 50, 1920, 1080, false);
 }
 
 //--------------------------------------------------------------
@@ -86,6 +88,28 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
+    drawPlayerOne();
+    drawPlayerTwo();
+    
+    
+    
+    
+    playerOne.drawDebug(300, 100); // info de debug
+    playerTwo.drawDebug(300, 300);
+    
+    game.drawDebug();
+    
+    if(showGui) gui.draw();
+}
+
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+void ofApp::drawPlayerOne(){
     ////////////////////////////////////////
     ///////// player ONE ///////////////////
     ////////////////////////////////////////
@@ -135,20 +159,76 @@ void ofApp::draw(){
     
     // semaforo, es autonomo si esta funcionando se ve
     semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
-
+    
     
     playerOne.drawConnection(); // barra de calidad de conexion
     mascaraBarra.draw(0, 0);
-    
-    
-    
-    
-    playerOne.drawDebug(300, 100); // info de debug
-    
-    game.drawDebug();
-    
-    if(showGui) gui.draw();
 }
+
+
+
+
+void ofApp::drawPlayerTwo(){
+    
+    secondWindow.begin();
+    ////////////////////////////////////////
+    ///////// player TWO ///////////////////
+    ////////////////////////////////////////
+    
+    fondoLogo.draw(0, 0); // fondo con reja
+    salpicadero.draw(0, 0); // salpicadero
+    
+    
+    // datos del player one
+    playerTwo.drawPlayerNumber();
+    playerTwo.drawConcentrationMeditation();
+    playerOne.drawlapsData();
+    
+    
+    ofPoint ptMarcadorUno(377, ofGetHeight()-esfera.getHeight());
+    
+    // dependiendo del estado de la partida dibujamos
+    // el semaforo de la cuenta atras
+    // la esfera con el marcador de power
+    // el panel de winner
+    switch (game.gameStatus) {
+        case partidaSlot::READY_TO_RUN:
+            esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+            playerTwo.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            break;
+            
+        case partidaSlot::START_ENGINES:
+            esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+            playerTwo.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            
+            break;
+            
+        case partidaSlot::COUNTDOWN:
+            
+            break;
+            
+        case partidaSlot::RACING:
+            esfera.draw(ptMarcadorUno.x,ptMarcadorUno.y); // esfera
+            playerTwo.drawGauge(ofPoint(945, (ofGetHeight()-esfera.getHeight()) + 508)); // aguja
+            break;
+            
+        case partidaSlot::FINISHED:
+            
+            break;
+    }
+    
+    
+    // semaforo, es autonomo si esta funcionando se ve
+    semaforo.draw(ptMarcadorUno.x,ptMarcadorUno.y); // semaforo en la misma pos que la esfera
+    
+    
+    playerTwo.drawConnection(); // barra de calidad de conexion
+    mascaraBarra.draw(0, 0);
+
+    
+    secondWindow.end();
+}
+
 
 //--------------------------------------------------------------
 void ofApp::finishedSemaforo(){

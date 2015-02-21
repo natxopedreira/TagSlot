@@ -5,6 +5,7 @@
 #include "partidaSlot.h"
 #include "ofxGui.h"
 #include "countDown.h"
+#include "ofxSecondWindow.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -34,6 +35,12 @@ public:
     
     void finishedSemaforo();
     void loadedSemaforo();
+    
+    void drawPlayerOne();
+    void drawPlayerTwo();
+    
+    
+    ofxSecondWindow secondWindow;
     
     // mindplay brainband bluetooth device
     mindSlotPlayer playerOne, playerTwo;
