@@ -124,19 +124,20 @@ void partidaSlot::listenToArdu(){
             std::size_t sz = arduino.readBytes(buffer, 2);
             
             // compruebas que este todo lo que quieres oir
-            if(buffer[0]=='1' && ofGetElapsedTimeMillis()> (timeSinceLastLapOne + minTimePerLap)){
+            if(buffer[0]=='A'){
                 // el coche 1 pasa por el sensor
                 ofNotifyEvent(pasoPorVueltaOne);
-                timeSinceLastLapOne = ofGetElapsedTimeMillis();
+               
             }
             
-            if(buffer[1]=='1' && ofGetElapsedTimeMillis()> (timeSinceLastLapTwo + minTimePerLap)){
+            if(buffer[0]=='B'){
                 // el coche 2 pasa por el sensor
                 ofNotifyEvent(pasoPorVueltaTwo);
-                timeSinceLastLapTwo = ofGetElapsedTimeMillis();
             }
             
-            arduino.flushInput(); // borramos el buffer
+            cout << "el arduino dice que paso por vuelta el " << buffer[0] << endl;
+            
+            //arduino.flushInput(); // borramos el buffer
             
         }
         

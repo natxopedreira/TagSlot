@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    ofSetWindowPosition(1920, 0);
+    ofToggleFullscreen();
+    
     // imagen de fondo del salpicadero
     bg.loadImage("bg.jpg");
     
@@ -155,7 +158,7 @@ void ofApp::finishedSemaforo(){
 }
 //--------------------------------------------------------------
 void ofApp::loadedSemaforo(){
-    // se acabo la cuenta atras asi que zapatilla
+    // el semaforo esta visible
     game.countdown();
 }
 
@@ -181,6 +184,47 @@ void ofApp::playerTwoNewLap(){
     // vuelta nueva coche 2
     playerTwo.pasoPorVuelta();
 }
+
+
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+// ---------------------- CONTROL DE JUEGO ----------------------- //
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+void ofApp::nuevaPartida(){
+    // aqui le explica la azafata a los users como va lo del mindwave, el blink y todo eso
+    // esta aqui hasta que todos tienen wai la conexion y estan listos
+    // no suena ni se mueve
+    // solo se ve el dashboard
+    
+    playerOne.resetLapCounter();
+    playerTwo.resetLapCounter();
+    
+    game.readyToRun();
+    
+}
+//--------------------------------------------------------------
+void ofApp::encederMotoresPartida(){
+    // ahora con todos con se–al wai encendemos el sonido para que oigan el brum brum
+    // los coches aun no se mueven
+    game.startEngines();
+}
+//--------------------------------------------------------------
+void ofApp::empezarPartida(){
+    // lanza el semaforo que al terminar comienza la partida
+    semaforo.go();
+}
+
+// --------------------------------------------------------------- //
+// --------------------------------------------------------------- //
+
+
+
+
 
 //--------------------------------------------------------------
 void ofApp::guardaGui(){
